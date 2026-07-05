@@ -1,0 +1,432 @@
+.cashport-budget-calculator {
+  --cashport-budget-bg: #07111a;
+  --cashport-budget-surface: rgba(11, 24, 36, 0.88);
+  --cashport-budget-surface-strong: #0d1d2c;
+  --cashport-budget-surface-soft: rgba(255, 255, 255, 0.06);
+  --cashport-budget-border: rgba(255, 255, 255, 0.08);
+  --cashport-budget-text: #f3f7fb;
+  --cashport-budget-text-soft: #a6b4c3;
+  --cashport-budget-accent: #29e16d;
+  --cashport-budget-accent-strong: #0bb95b;
+  --cashport-budget-danger: #ff6b6b;
+  --cashport-budget-warning: #ffbf47;
+  --cashport-budget-info: #57c7ff;
+  --cashport-budget-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  --cashport-budget-radius-xl: 28px;
+  --cashport-budget-radius-lg: 22px;
+  --cashport-budget-radius-md: 16px;
+  --cashport-budget-radius-sm: 12px;
+  --cashport-budget-max-width: 1280px;
+  color: var(--cashport-budget-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: light) {
+  .cashport-budget-calculator {
+    --cashport-budget-bg: #eef4f8;
+    --cashport-budget-surface: rgba(255, 255, 255, 0.92);
+    --cashport-budget-surface-strong: #ffffff;
+    --cashport-budget-surface-soft: rgba(7, 17, 26, 0.04);
+    --cashport-budget-border: rgba(7, 17, 26, 0.08);
+    --cashport-budget-text: #0b1622;
+    --cashport-budget-text-soft: #516273;
+    --cashport-budget-shadow: 0 24px 60px rgba(20, 31, 43, 0.12);
+  }
+}
+
+.cashport-budget-calculator *,
+.cashport-budget-calculator *::before,
+.cashport-budget-calculator *::after {
+  box-sizing: border-box;
+}
+
+.cashport-budget-shell {
+  max-width: var(--cashport-budget-max-width);
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at top right, rgba(41, 225, 109, 0.18), transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+    var(--cashport-budget-bg);
+  box-shadow: var(--cashport-budget-shadow);
+}
+
+.cashport-budget-hero {
+  margin-bottom: 24px;
+}
+
+.cashport-budget-eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cashport-budget-accent);
+}
+
+.cashport-budget-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  line-height: 1.1;
+}
+
+.cashport-budget-intro {
+  max-width: 62ch;
+  margin: 12px 0 0;
+  color: var(--cashport-budget-text-soft);
+}
+
+.cashport-budget-layout {
+  display: grid;
+  gap: 24px;
+}
+
+.cashport-budget-main,
+.cashport-budget-sidebar,
+.cashport-budget-groups,
+.cashport-budget-chart-stack {
+  display: grid;
+  gap: 24px;
+}
+
+.cashport-budget-card,
+.cashport-budget-subcard,
+.cashport-budget-chart-card {
+  border: 1px solid var(--cashport-budget-border);
+  border-radius: var(--cashport-budget-radius-lg);
+  background: var(--cashport-budget-surface);
+  backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.cashport-budget-card,
+.cashport-budget-chart-card {
+  padding: 24px;
+}
+
+.cashport-budget-subcard {
+  padding: 20px;
+}
+
+.cashport-budget-card-header {
+  margin-bottom: 18px;
+}
+
+.cashport-budget-section-title,
+.cashport-budget-subtitle {
+  margin: 0;
+  font-weight: 700;
+}
+
+.cashport-budget-subtitle {
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.cashport-budget-section-copy {
+  margin: 8px 0 0;
+  color: var(--cashport-budget-text-soft);
+  font-size: 0.95rem;
+}
+
+.cashport-budget-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.cashport-budget-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cashport-budget-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.cashport-budget-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--cashport-budget-radius-sm);
+  background: var(--cashport-budget-surface-soft);
+  color: var(--cashport-budget-text);
+  font: inherit;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.cashport-budget-input::placeholder {
+  color: var(--cashport-budget-text-soft);
+}
+
+.cashport-budget-input:focus {
+  outline: none;
+  border-color: rgba(41, 225, 109, 0.5);
+  background: rgba(41, 225, 109, 0.08);
+  transform: translateY(-1px);
+}
+
+.cashport-budget-input:invalid {
+  box-shadow: none;
+}
+
+.cashport-budget-metrics {
+  display: grid;
+  gap: 14px;
+}
+
+.cashport-budget-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: var(--cashport-budget-radius-md);
+  background: var(--cashport-budget-surface-soft);
+}
+
+.cashport-budget-metric-label {
+  color: var(--cashport-budget-text-soft);
+  font-size: 0.95rem;
+}
+
+.cashport-budget-metric-value {
+  font-size: 1rem;
+  text-align: right;
+}
+
+.cashport-budget-metric-value[data-tone="positive"] {
+  color: var(--cashport-budget-accent);
+}
+
+.cashport-budget-metric-value[data-tone="negative"] {
+  color: var(--cashport-budget-danger);
+}
+
+.cashport-budget-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 108px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(41, 225, 109, 0.14);
+  color: var(--cashport-budget-accent);
+  font-size: 0.95rem;
+}
+
+.cashport-budget-badge[data-status="bun"] {
+  background: rgba(87, 199, 255, 0.14);
+  color: var(--cashport-budget-info);
+}
+
+.cashport-budget-badge[data-status="atentie"] {
+  background: rgba(255, 191, 71, 0.16);
+  color: var(--cashport-budget-warning);
+}
+
+.cashport-budget-badge[data-status="critic"] {
+  background: rgba(255, 107, 107, 0.16);
+  color: var(--cashport-budget-danger);
+}
+
+.cashport-budget-chart-heading,
+.cashport-budget-bar-label-row,
+.cashport-budget-legend-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cashport-budget-chart-heading {
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.cashport-budget-chart-heading span,
+.cashport-budget-bar-label-row span {
+  color: var(--cashport-budget-text-soft);
+}
+
+.cashport-budget-donut-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  max-width: 260px;
+  margin: 0 auto 18px;
+}
+
+.cashport-budget-donut {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  transform: rotate(-90deg);
+}
+
+.cashport-budget-donut-track,
+.cashport-budget-donut-segment {
+  fill: none;
+  stroke-width: 16;
+}
+
+.cashport-budget-donut-track {
+  stroke: var(--cashport-budget-surface-soft);
+}
+
+.cashport-budget-donut-center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.cashport-budget-donut-center span {
+  font-size: 0.85rem;
+  color: var(--cashport-budget-text-soft);
+}
+
+.cashport-budget-donut-center strong {
+  max-width: 110px;
+}
+
+.cashport-budget-legend {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cashport-budget-legend-item {
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: var(--cashport-budget-radius-sm);
+  background: var(--cashport-budget-surface-soft);
+}
+
+.cashport-budget-legend-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cashport-budget-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: 0 0 12px;
+}
+
+.cashport-budget-bars {
+  display: grid;
+  gap: 16px;
+}
+
+.cashport-budget-bar-group {
+  display: grid;
+  gap: 8px;
+}
+
+.cashport-budget-bar-track {
+  overflow: hidden;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--cashport-budget-surface-soft);
+}
+
+.cashport-budget-bar-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  transition: width 0.3s ease;
+}
+
+.cashport-budget-bar-fill--income {
+  background: linear-gradient(90deg, var(--cashport-budget-accent), #8bffb3);
+}
+
+.cashport-budget-bar-fill--expense {
+  background: linear-gradient(90deg, #57c7ff, #9ad8ff);
+}
+
+.cashport-budget-recommendations {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cashport-budget-recommendation {
+  padding: 14px 16px;
+  border-left: 3px solid var(--cashport-budget-accent);
+  border-radius: 0 var(--cashport-budget-radius-sm) var(--cashport-budget-radius-sm) 0;
+  background: var(--cashport-budget-surface-soft);
+}
+
+.cashport-budget-footer {
+  margin-top: 24px;
+}
+
+.cashport-budget-disclaimer {
+  margin: 0;
+  color: var(--cashport-budget-text-soft);
+  font-size: 0.92rem;
+}
+
+@media (min-width: 768px) {
+  .cashport-budget-grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashport-budget-field--full {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cashport-budget-layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.9fr);
+    align-items: start;
+  }
+
+  .cashport-budget-sidebar {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .cashport-budget-shell,
+  .cashport-budget-card,
+  .cashport-budget-chart-card,
+  .cashport-budget-subcard {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .cashport-budget-shell {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 24px;
+  }
+
+  .cashport-budget-metric,
+  .cashport-budget-chart-heading,
+  .cashport-budget-bar-label-row,
+  .cashport-budget-legend-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cashport-budget-badge,
+  .cashport-budget-metric-value {
+    text-align: left;
+  }
+}

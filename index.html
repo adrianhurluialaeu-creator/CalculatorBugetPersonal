@@ -1,0 +1,272 @@
+<section class="cashport-budget-calculator" data-cashport-budget-root>
+  <div class="cashport-budget-shell">
+    <header class="cashport-budget-hero">
+      <p class="cashport-budget-eyebrow">Cashport.ro · Planificare financiară</p>
+      <h2 class="cashport-budget-title">Calculator de Buget Personal</h2>
+      <p class="cashport-budget-intro">
+        Analizează rapid veniturile, cheltuielile, economiile și investițiile pentru a înțelege
+        cât de echilibrat este bugetul tău lunar.
+      </p>
+    </header>
+
+    <div class="cashport-budget-layout">
+      <div class="cashport-budget-main">
+        <section class="cashport-budget-card" aria-labelledby="cashport-budget-income-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cashport-budget-income-title" class="cashport-budget-section-title">Venituri</h3>
+            <p class="cashport-budget-section-copy">Completează toate sursele de venit lunar net.</p>
+          </div>
+          <div class="cashport-budget-grid cashport-budget-grid--two">
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Salariu net</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal" data-type="income" data-category="salary" aria-describedby="cashport-budget-income-title" />
+            </label>
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Venituri din chirii</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal" data-type="income" data-category="rentIncome" />
+            </label>
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Dividende</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal" data-type="income" data-category="dividends" />
+            </label>
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Venituri din afaceri</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal" data-type="income" data-category="business" />
+            </label>
+            <label class="cashport-budget-field cashport-budget-field--full">
+              <span class="cashport-budget-label">Alte venituri</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal" data-type="income" data-category="otherIncome" />
+            </label>
+          </div>
+        </section>
+
+        <section class="cashport-budget-card" aria-labelledby="cashport-budget-expenses-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cashport-budget-expenses-title" class="cashport-budget-section-title">Cheltuieli</h3>
+            <p class="cashport-budget-section-copy">Toate câmpurile goale sunt tratate automat ca 0 lei.</p>
+          </div>
+
+          <div class="cashport-budget-groups">
+            <section class="cashport-budget-subcard" aria-labelledby="cashport-budget-housing-title">
+              <h4 id="cashport-budget-housing-title" class="cashport-budget-subtitle">Locuință</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Chirie / rată</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="housing" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Utilități</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="housing" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Internet</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal" data-type="expense" data-category="housing" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Telefon</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal" data-type="expense" data-category="housing" />
+                </label>
+              </div>
+            </section>
+
+            <section class="cashport-budget-subcard" aria-labelledby="cashport-budget-transport-title">
+              <h4 id="cashport-budget-transport-title" class="cashport-budget-subtitle">Transport</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Combustibil</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="transport" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Transport public</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal" data-type="expense" data-category="transport" />
+                </label>
+                <label class="cashport-budget-field cashport-budget-field--full">
+                  <span class="cashport-budget-label">Întreținere auto</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="transport" />
+                </label>
+              </div>
+            </section>
+
+            <section class="cashport-budget-subcard" aria-labelledby="cashport-budget-food-title">
+              <h4 id="cashport-budget-food-title" class="cashport-budget-subtitle">Alimentație</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Supermarket</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="food" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Restaurante</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="food" />
+                </label>
+              </div>
+            </section>
+
+            <section class="cashport-budget-subcard" aria-labelledby="cashport-budget-health-title">
+              <h4 id="cashport-budget-health-title" class="cashport-budget-subtitle">Sănătate</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Asigurări</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="health" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Medicamente</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal" data-type="expense" data-category="health" />
+                </label>
+              </div>
+            </section>
+
+            <section class="cashport-budget-subcard" aria-labelledby="cashport-budget-other-title">
+              <h4 id="cashport-budget-other-title" class="cashport-budget-subtitle">Alte categorii</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Educație</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="education" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Îmbrăcăminte</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="clothing" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Divertisment</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="entertainment" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Abonamente</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal" data-type="expense" data-category="subscriptions" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Credite</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="debt" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Economii</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="savings" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Investiții</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="investments" />
+                </label>
+                <label class="cashport-budget-field cashport-budget-field--full">
+                  <span class="cashport-budget-label">Alte cheltuieli</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal" data-type="expense" data-category="other" />
+                </label>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
+
+      <aside class="cashport-budget-sidebar" aria-label="Rezultate și recomandări">
+        <section class="cashport-budget-card cashport-budget-results">
+          <div class="cashport-budget-card-header">
+            <h3 class="cashport-budget-section-title">Rezultate instant</h3>
+            <p class="cashport-budget-section-copy">Indicatorii se actualizează imediat când modifici valorile.</p>
+          </div>
+
+          <div class="cashport-budget-metrics" aria-live="polite">
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Venit total</span>
+              <strong class="cashport-budget-metric-value" data-result="incomeTotal">0 lei</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Cheltuieli totale</span>
+              <strong class="cashport-budget-metric-value" data-result="expenseTotal">0 lei</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Sold lunar</span>
+              <strong class="cashport-budget-metric-value" data-result="balance">0 lei</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Rata economisirii</span>
+              <strong class="cashport-budget-metric-value" data-result="savingsRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Rata investițiilor</span>
+              <strong class="cashport-budget-metric-value" data-result="investmentRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Gradul de îndatorare</span>
+              <strong class="cashport-budget-metric-value" data-result="debtRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Pondere locuință</span>
+              <strong class="cashport-budget-metric-value" data-result="housingRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric cashport-budget-metric--status">
+              <span class="cashport-budget-metric-label">Status financiar</span>
+              <strong class="cashport-budget-badge" data-result="status">Bun</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="cashport-budget-card" aria-labelledby="cashport-budget-charts-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cashport-budget-charts-title" class="cashport-budget-section-title">Distribuții vizuale</h3>
+            <p class="cashport-budget-section-copy">Fără librării externe, doar SVG și CSS responsive.</p>
+          </div>
+
+          <div class="cashport-budget-chart-stack">
+            <div class="cashport-budget-chart-card">
+              <div class="cashport-budget-chart-heading">
+                <span>Distribuția cheltuielilor</span>
+                <strong data-result="largestCategory">Nicio categorie</strong>
+              </div>
+              <div class="cashport-budget-donut-wrap">
+                <svg class="cashport-budget-donut" viewBox="0 0 120 120" role="img" aria-labelledby="cashport-budget-donut-title cashport-budget-donut-desc">
+                  <title id="cashport-budget-donut-title">Diagramă circulară a cheltuielilor</title>
+                  <desc id="cashport-budget-donut-desc">Ponderea fiecărei categorii de cheltuieli în bugetul lunar.</desc>
+                  <circle class="cashport-budget-donut-track" cx="60" cy="60" r="42"></circle>
+                  <g data-chart="segments"></g>
+                </svg>
+                <div class="cashport-budget-donut-center">
+                  <span>Total</span>
+                  <strong data-result="expenseTotalCompact">0 lei</strong>
+                </div>
+              </div>
+              <ul class="cashport-budget-legend" data-chart="legend"></ul>
+            </div>
+
+            <div class="cashport-budget-chart-card">
+              <div class="cashport-budget-chart-heading">
+                <span>Venituri vs. cheltuieli</span>
+                <strong data-result="balanceCompact">0 lei</strong>
+              </div>
+              <div class="cashport-budget-bars" aria-hidden="true">
+                <div class="cashport-budget-bar-group">
+                  <div class="cashport-budget-bar-label-row">
+                    <span>Venituri</span>
+                    <strong data-result="incomeTotalCompact">0 lei</strong>
+                  </div>
+                  <div class="cashport-budget-bar-track">
+                    <span class="cashport-budget-bar-fill cashport-budget-bar-fill--income" data-chart="incomeBar"></span>
+                  </div>
+                </div>
+                <div class="cashport-budget-bar-group">
+                  <div class="cashport-budget-bar-label-row">
+                    <span>Cheltuieli</span>
+                    <strong data-result="expenseTotalBar">0 lei</strong>
+                  </div>
+                  <div class="cashport-budget-bar-track">
+                    <span class="cashport-budget-bar-fill cashport-budget-bar-fill--expense" data-chart="expenseBar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cashport-budget-card" aria-labelledby="cashport-budget-recommendations-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cashport-budget-recommendations-title" class="cashport-budget-section-title">Recomandări automate</h3>
+            <p class="cashport-budget-section-copy">Sugestii generate pe baza indicatorilor calculați.</p>
+          </div>
+          <ul class="cashport-budget-recommendations" data-result="recommendations" aria-live="polite"></ul>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="cashport-budget-footer">
+      <p class="cashport-budget-disclaimer">Rezultatele sunt estimative și nu reprezintă consultanță financiară.</p>
+    </footer>
+  </div>
+</section>
