@@ -40,12 +40,12 @@
 
   var palette = ['#29e16d', '#57c7ff', '#8b5cf6', '#ffbf47', '#fb7185', '#2dd4bf', '#f97316', '#60a5fa', '#c084fc', '#14b8a6', '#facc15', '#94a3b8'];
 
-  function parseNumericInput(value) {
+  function parseLocalizedNumber(value) {
     return typeof value === 'number' ? value : Number(String(value).replace(',', '.'));
   }
 
   function sanitizeValue(value) {
-    var numericValue = parseNumericInput(value);
+    var numericValue = parseLocalizedNumber(value);
 
     if (!Number.isFinite(numericValue) || numericValue < 0) {
       return 0;
@@ -60,6 +60,10 @@
 
   function formatPercent(value) {
     return percentFormatter.format(value || 0) + '%';
+  }
+
+  function getPaletteColor(index) {
+    return palette.length ? palette[index % palette.length] : '#29e16d';
   }
 
   function setResult(name, value, attributes) {
@@ -214,12 +218,13 @@
     entries.forEach(function (entry, index) {
       var share = entry.value / expenseTotal;
       var dashLength = share * circumference;
+      var segmentColor = getPaletteColor(index);
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.setAttribute('class', 'cashport-budget-donut-segment');
       circle.setAttribute('cx', String(donutCenter));
       circle.setAttribute('cy', String(donutCenter));
       circle.setAttribute('r', String(donutRadius));
-      circle.setAttribute('stroke', palette[index % palette.length]);
+      circle.setAttribute('stroke', segmentColor);
       circle.setAttribute('stroke-dasharray', dashLength + ' ' + (circumference - dashLength));
       circle.setAttribute('stroke-dashoffset', String(-offset));
       segmentContainer.appendChild(circle);
@@ -233,7 +238,7 @@
       item.className = 'cashport-budget-legend-item';
       label.className = 'cashport-budget-legend-label';
       dot.className = 'cashport-budget-legend-dot';
-      dot.style.background = palette[index % palette.length];
+      dot.style.background = segmentColor;
       label.appendChild(dot);
       label.appendChild(document.createTextNode(entry.label));
       percentageValue.textContent = formatPercent(percentage(entry.value, expenseTotal));
@@ -281,7 +286,7 @@
 
   inputs.forEach(function (input) {
     input.addEventListener('input', function () {
-      var parsedValue = parseNumericInput(input.value);
+      var parsedValue = parseLocalizedNumber(input.value);
       var sanitizedValue = sanitizeValue(parsedValue);
 
       if (input.value && (!Number.isFinite(parsedValue) || parsedValue < 0)) {
