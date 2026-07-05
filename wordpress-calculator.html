@@ -1,0 +1,1298 @@
+<!-- ============================================================
+  Calculator de Buget Personal – Cashport.ro
+  Versiune WordPress all-in-one (v2)
+
+  INSTRUCȚIUNI DE UTILIZARE:
+  1. Copiați TOT conținutul acestui fișier
+  2. Adăugați un bloc "HTML Personalizat" (Gutenberg), WPCode,
+     un widget HTML din Elementor / Divi / orice Page Builder
+  3. Lipiți codul și salvați
+  4. Nu sunt necesare alte modificări
+
+  Compatibil cu:
+  - WordPress 6.x (blocuri Gutenberg, widget-uri clasice)
+  - WPCode (snippet-uri inline sau header/footer)
+  - Elementor, Divi, Beaver Builder, Oxygen
+  - Tema Hostinger (Astra, Hello Elementor, OceanWP etc.)
+  - Orice browser modern (Chrome, Firefox, Safari, Edge)
+============================================================ -->
+
+<!-- ======================================================== -->
+<!-- 1. STILURI (scoped 100% la .cashport-budget-calculator)  -->
+<!-- ======================================================== -->
+<style>
+/* ---------- CSS custom properties & root scope ---------- */
+.cashport-budget-calculator {
+  --cbp-bg: #07111a;
+  --cbp-surface: rgba(11, 24, 36, 0.88);
+  --cbp-surface-strong: #0d1d2c;
+  --cbp-surface-soft: rgba(255, 255, 255, 0.06);
+  --cbp-border: rgba(255, 255, 255, 0.08);
+  --cbp-text: #f3f7fb;
+  --cbp-text-soft: #a6b4c3;
+  --cbp-accent: #29e16d;
+  --cbp-accent-strong: #0bb95b;
+  --cbp-danger: #ff6b6b;
+  --cbp-warning: #ffbf47;
+  --cbp-info: #57c7ff;
+  --cbp-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  --cbp-radius-xl: 28px;
+  --cbp-radius-lg: 22px;
+  --cbp-radius-md: 16px;
+  --cbp-radius-sm: 12px;
+  --cbp-badge-min-width: 108px;
+  --cbp-max-width: 1280px;
+
+  color: var(--cbp-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  /* Isolation: prevent WordPress theme styles from leaking in */
+  isolation: isolate;
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  .cashport-budget-calculator {
+    --cbp-bg: #eef4f8;
+    --cbp-surface: rgba(255, 255, 255, 0.92);
+    --cbp-surface-strong: #ffffff;
+    --cbp-surface-soft: rgba(7, 17, 26, 0.04);
+    --cbp-border: rgba(7, 17, 26, 0.08);
+    --cbp-text: #0b1622;
+    --cbp-text-soft: #516273;
+    --cbp-shadow: 0 24px 60px rgba(20, 31, 43, 0.12);
+  }
+}
+
+/* ---------- Box-sizing reset scoped to component ---------- */
+.cashport-budget-calculator,
+.cashport-budget-calculator *,
+.cashport-budget-calculator *::before,
+.cashport-budget-calculator *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Reset WordPress theme heading & paragraph overrides ---------- */
+.cashport-budget-calculator h2,
+.cashport-budget-calculator h3,
+.cashport-budget-calculator h4 {
+  margin: 0;
+  padding: 0;
+  font-weight: 700;
+  line-height: 1.2;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.cashport-budget-calculator p {
+  margin: 0;
+  padding: 0;
+}
+
+.cashport-budget-calculator ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cashport-budget-calculator li {
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- Shell / wrapper ---------- */
+.cashport-budget-calculator .cashport-budget-shell {
+  max-width: var(--cbp-max-width);
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at top right, rgba(41, 225, 109, 0.18), transparent 22%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+    var(--cbp-bg);
+  box-shadow: var(--cbp-shadow);
+}
+
+/* ---------- Hero ---------- */
+.cashport-budget-calculator .cashport-budget-hero {
+  margin-bottom: 24px;
+}
+
+.cashport-budget-calculator .cashport-budget-eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cbp-accent);
+}
+
+.cashport-budget-calculator .cashport-budget-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  line-height: 1.1;
+  color: var(--cbp-text);
+}
+
+.cashport-budget-calculator .cashport-budget-intro {
+  max-width: 62ch;
+  margin: 12px 0 0;
+  color: var(--cbp-text-soft);
+  font-size: 1rem;
+}
+
+/* ---------- Layout ---------- */
+.cashport-budget-calculator .cashport-budget-layout {
+  display: grid;
+  gap: 24px;
+}
+
+.cashport-budget-calculator .cashport-budget-main,
+.cashport-budget-calculator .cashport-budget-sidebar,
+.cashport-budget-calculator .cashport-budget-groups,
+.cashport-budget-calculator .cashport-budget-chart-stack {
+  display: grid;
+  gap: 24px;
+}
+
+/* ---------- Cards ---------- */
+.cashport-budget-calculator .cashport-budget-card,
+.cashport-budget-calculator .cashport-budget-subcard,
+.cashport-budget-calculator .cashport-budget-chart-card {
+  border: 1px solid var(--cbp-border);
+  border-radius: var(--cbp-radius-lg);
+  /* Fallback background for browsers without backdrop-filter */
+  background: var(--cbp-surface-strong);
+  background: var(--cbp-surface);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.cashport-budget-calculator .cashport-budget-card,
+.cashport-budget-calculator .cashport-budget-chart-card {
+  padding: 24px;
+}
+
+.cashport-budget-calculator .cashport-budget-subcard {
+  padding: 20px;
+}
+
+.cashport-budget-calculator .cashport-budget-card-header {
+  margin-bottom: 18px;
+}
+
+.cashport-budget-calculator .cashport-budget-section-title,
+.cashport-budget-calculator .cashport-budget-subtitle {
+  margin: 0;
+  font-weight: 700;
+  color: var(--cbp-text);
+}
+
+.cashport-budget-calculator .cashport-budget-subtitle {
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.cashport-budget-calculator .cashport-budget-section-copy {
+  margin: 8px 0 0;
+  color: var(--cbp-text-soft);
+  font-size: 0.95rem;
+}
+
+/* ---------- Grid & Fields ---------- */
+.cashport-budget-calculator .cashport-budget-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.cashport-budget-calculator .cashport-budget-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cashport-budget-calculator .cashport-budget-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cbp-text);
+}
+
+/* ---------- Input – reset WordPress + theme overrides ---------- */
+.cashport-budget-calculator .cashport-budget-input {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--cbp-radius-sm);
+  background: var(--cbp-surface-soft);
+  color: var(--cbp-text);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  -webkit-transition: border-color 0.2s ease, -webkit-transform 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
+}
+
+.cashport-budget-calculator .cashport-budget-input::-webkit-outer-spin-button,
+.cashport-budget-calculator .cashport-budget-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cashport-budget-calculator .cashport-budget-input::placeholder {
+  color: var(--cbp-text-soft);
+}
+
+.cashport-budget-calculator .cashport-budget-input:focus {
+  outline: none;
+  border-color: rgba(41, 225, 109, 0.5);
+  background: rgba(41, 225, 109, 0.08);
+  -webkit-transform: translateY(-1px);
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.cashport-budget-calculator .cashport-budget-input:invalid {
+  box-shadow: none;
+}
+
+/* ---------- Metrics ---------- */
+.cashport-budget-calculator .cashport-budget-metrics {
+  display: grid;
+  gap: 14px;
+}
+
+.cashport-budget-calculator .cashport-budget-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: var(--cbp-radius-md);
+  background: var(--cbp-surface-soft);
+}
+
+.cashport-budget-calculator .cashport-budget-metric-label {
+  color: var(--cbp-text-soft);
+  font-size: 0.95rem;
+}
+
+.cashport-budget-calculator .cashport-budget-metric-value {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: right;
+  color: var(--cbp-text);
+}
+
+.cashport-budget-calculator .cashport-budget-metric-value[data-tone="positive"] {
+  color: var(--cbp-accent);
+}
+
+.cashport-budget-calculator .cashport-budget-metric-value[data-tone="negative"] {
+  color: var(--cbp-danger);
+}
+
+/* ---------- Status badge ---------- */
+.cashport-budget-calculator .cashport-budget-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--cbp-badge-min-width);
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(41, 225, 109, 0.14);
+  color: var(--cbp-accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+}
+
+.cashport-budget-calculator .cashport-budget-badge[data-status="bun"] {
+  background: rgba(87, 199, 255, 0.14);
+  color: var(--cbp-info);
+}
+
+.cashport-budget-calculator .cashport-budget-badge[data-status="atentie"] {
+  background: rgba(255, 191, 71, 0.16);
+  color: var(--cbp-warning);
+}
+
+.cashport-budget-calculator .cashport-budget-badge[data-status="critic"] {
+  background: rgba(255, 107, 107, 0.16);
+  color: var(--cbp-danger);
+}
+
+.cashport-budget-calculator .cashport-budget-badge[data-status="excelent"] {
+  background: rgba(41, 225, 109, 0.18);
+  color: var(--cbp-accent);
+}
+
+/* ---------- Charts headings & legend ---------- */
+.cashport-budget-calculator .cashport-budget-chart-heading,
+.cashport-budget-calculator .cashport-budget-bar-label-row,
+.cashport-budget-calculator .cashport-budget-legend-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cashport-budget-calculator .cashport-budget-chart-heading {
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.cashport-budget-calculator .cashport-budget-chart-heading span,
+.cashport-budget-calculator .cashport-budget-bar-label-row span {
+  color: var(--cbp-text-soft);
+}
+
+/* ---------- Donut chart ---------- */
+.cashport-budget-calculator .cashport-budget-donut-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  max-width: 260px;
+  margin: 0 auto 18px;
+}
+
+.cashport-budget-calculator .cashport-budget-donut {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  display: block;
+}
+
+.cashport-budget-calculator .cashport-budget-donut-track,
+.cashport-budget-calculator .cashport-budget-donut-segment {
+  fill: none;
+  stroke-width: 16;
+}
+
+.cashport-budget-calculator .cashport-budget-donut-track {
+  stroke: var(--cbp-surface-soft);
+}
+
+.cashport-budget-calculator .cashport-budget-donut-center {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.cashport-budget-calculator .cashport-budget-donut-center span {
+  font-size: 0.85rem;
+  color: var(--cbp-text-soft);
+}
+
+.cashport-budget-calculator .cashport-budget-donut-center strong {
+  max-width: 110px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--cbp-text);
+}
+
+/* ---------- Legend ---------- */
+.cashport-budget-calculator .cashport-budget-legend {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cashport-budget-calculator .cashport-budget-legend-item {
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: var(--cbp-radius-sm);
+  background: var(--cbp-surface-soft);
+  color: var(--cbp-text);
+  font-size: 0.9rem;
+}
+
+.cashport-budget-calculator .cashport-budget-legend-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cashport-budget-calculator .cashport-budget-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: 0 0 12px;
+  display: inline-block;
+}
+
+/* ---------- Bar chart ---------- */
+.cashport-budget-calculator .cashport-budget-bars {
+  display: grid;
+  gap: 16px;
+}
+
+.cashport-budget-calculator .cashport-budget-bar-group {
+  display: grid;
+  gap: 8px;
+}
+
+.cashport-budget-calculator .cashport-budget-bar-track {
+  overflow: hidden;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--cbp-surface-soft);
+}
+
+.cashport-budget-calculator .cashport-budget-bar-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  -webkit-transition: width 0.3s ease;
+  transition: width 0.3s ease;
+}
+
+.cashport-budget-calculator .cashport-budget-bar-fill--income {
+  background: linear-gradient(90deg, var(--cbp-accent), #8bffb3);
+}
+
+.cashport-budget-calculator .cashport-budget-bar-fill--expense {
+  background: linear-gradient(90deg, #57c7ff, #9ad8ff);
+}
+
+/* ---------- Recommendations ---------- */
+.cashport-budget-calculator .cashport-budget-recommendations {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cashport-budget-calculator .cashport-budget-recommendation {
+  padding: 14px 16px;
+  border-left: 3px solid var(--cbp-accent);
+  border-radius: 0 var(--cbp-radius-sm) var(--cbp-radius-sm) 0;
+  background: var(--cbp-surface-soft);
+  color: var(--cbp-text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ---------- Footer ---------- */
+.cashport-budget-calculator .cashport-budget-footer {
+  margin-top: 24px;
+}
+
+.cashport-budget-calculator .cashport-budget-disclaimer {
+  margin: 0;
+  color: var(--cbp-text-soft);
+  font-size: 0.92rem;
+}
+
+/* ---------- Responsive: tablet ---------- */
+@media (min-width: 768px) {
+  .cashport-budget-calculator .cashport-budget-grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cashport-budget-calculator .cashport-budget-field--full {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Responsive: desktop ---------- */
+@media (min-width: 1024px) {
+  .cashport-budget-calculator .cashport-budget-layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.9fr);
+    align-items: start;
+  }
+
+  .cashport-budget-calculator .cashport-budget-sidebar {
+    position: sticky;
+    top: 24px;
+  }
+}
+
+/* ---------- Responsive: mobile ---------- */
+@media (max-width: 767px) {
+  .cashport-budget-calculator .cashport-budget-shell,
+  .cashport-budget-calculator .cashport-budget-card,
+  .cashport-budget-calculator .cashport-budget-chart-card,
+  .cashport-budget-calculator .cashport-budget-subcard {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .cashport-budget-calculator .cashport-budget-shell {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 24px;
+  }
+
+  .cashport-budget-calculator .cashport-budget-metric,
+  .cashport-budget-calculator .cashport-budget-chart-heading,
+  .cashport-budget-calculator .cashport-budget-bar-label-row,
+  .cashport-budget-calculator .cashport-budget-legend-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cashport-budget-calculator .cashport-budget-badge,
+  .cashport-budget-calculator .cashport-budget-metric-value {
+    text-align: left;
+  }
+}
+</style>
+
+<!-- ======================================================== -->
+<!-- 2. HTML – structura calculatorului                        -->
+<!-- ======================================================== -->
+<section class="cashport-budget-calculator" data-cashport-budget-root>
+  <div class="cashport-budget-shell">
+    <header class="cashport-budget-hero">
+      <p class="cashport-budget-eyebrow">Cashport.ro · Planificare financiară</p>
+      <h2 class="cashport-budget-title">Calculator de Buget Personal</h2>
+      <p class="cashport-budget-intro">
+        Analizează rapid veniturile, cheltuielile, economiile și investițiile pentru a înțelege
+        cât de echilibrat este bugetul tău lunar.
+      </p>
+    </header>
+
+    <div class="cashport-budget-layout">
+      <div class="cashport-budget-main">
+        <!-- Venituri -->
+        <section class="cashport-budget-card" aria-labelledby="cbp-income-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cbp-income-title" class="cashport-budget-section-title">Venituri</h3>
+            <p class="cashport-budget-section-copy">Completează toate sursele de venit lunar net.</p>
+          </div>
+          <div class="cashport-budget-grid cashport-budget-grid--two">
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Salariu net</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal"
+                     data-type="income" data-category="salary" placeholder="0" />
+            </label>
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Venituri din chirii</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal"
+                     data-type="income" data-category="rentIncome" placeholder="0" />
+            </label>
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Dividende</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal"
+                     data-type="income" data-category="dividends" placeholder="0" />
+            </label>
+            <label class="cashport-budget-field">
+              <span class="cashport-budget-label">Venituri din afaceri</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal"
+                     data-type="income" data-category="business" placeholder="0" />
+            </label>
+            <label class="cashport-budget-field cashport-budget-field--full">
+              <span class="cashport-budget-label">Alte venituri</span>
+              <input class="cashport-budget-input" type="number" min="0" step="100" inputmode="decimal"
+                     data-type="income" data-category="otherIncome" placeholder="0" />
+            </label>
+          </div>
+        </section>
+
+        <!-- Cheltuieli -->
+        <section class="cashport-budget-card" aria-labelledby="cbp-expenses-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cbp-expenses-title" class="cashport-budget-section-title">Cheltuieli</h3>
+            <p class="cashport-budget-section-copy">Toate câmpurile goale sunt tratate automat ca 0 lei.</p>
+          </div>
+
+          <div class="cashport-budget-groups">
+            <!-- Locuință -->
+            <section class="cashport-budget-subcard" aria-labelledby="cbp-housing-title">
+              <h4 id="cbp-housing-title" class="cashport-budget-subtitle">Locuință</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Chirie / rată</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="housing" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Utilități</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="housing" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Internet</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal"
+                         data-type="expense" data-category="housing" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Telefon</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal"
+                         data-type="expense" data-category="housing" placeholder="0" />
+                </label>
+              </div>
+            </section>
+
+            <!-- Transport -->
+            <section class="cashport-budget-subcard" aria-labelledby="cbp-transport-title">
+              <h4 id="cbp-transport-title" class="cashport-budget-subtitle">Transport</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Combustibil</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="transport" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Transport public</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal"
+                         data-type="expense" data-category="transport" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field cashport-budget-field--full">
+                  <span class="cashport-budget-label">Întreținere auto</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="transport" placeholder="0" />
+                </label>
+              </div>
+            </section>
+
+            <!-- Alimentație -->
+            <section class="cashport-budget-subcard" aria-labelledby="cbp-food-title">
+              <h4 id="cbp-food-title" class="cashport-budget-subtitle">Alimentație</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Supermarket</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="food" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Restaurante</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="food" placeholder="0" />
+                </label>
+              </div>
+            </section>
+
+            <!-- Sănătate -->
+            <section class="cashport-budget-subcard" aria-labelledby="cbp-health-title">
+              <h4 id="cbp-health-title" class="cashport-budget-subtitle">Sănătate</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Asigurări</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="health" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Medicamente</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal"
+                         data-type="expense" data-category="health" placeholder="0" />
+                </label>
+              </div>
+            </section>
+
+            <!-- Alte categorii -->
+            <section class="cashport-budget-subcard" aria-labelledby="cbp-other-title">
+              <h4 id="cbp-other-title" class="cashport-budget-subtitle">Alte categorii</h4>
+              <div class="cashport-budget-grid cashport-budget-grid--two">
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Educație</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="education" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Îmbrăcăminte</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="clothing" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Divertisment</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="entertainment" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Abonamente</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="10" inputmode="decimal"
+                         data-type="expense" data-category="subscriptions" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Credite</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="debt" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Economii</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="savings" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field">
+                  <span class="cashport-budget-label">Investiții</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="investments" placeholder="0" />
+                </label>
+                <label class="cashport-budget-field cashport-budget-field--full">
+                  <span class="cashport-budget-label">Alte cheltuieli</span>
+                  <input class="cashport-budget-input" type="number" min="0" step="50" inputmode="decimal"
+                         data-type="expense" data-category="other" placeholder="0" />
+                </label>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div><!-- /.cashport-budget-main -->
+
+      <aside class="cashport-budget-sidebar" aria-label="Rezultate și recomandări">
+        <!-- Rezultate instant -->
+        <section class="cashport-budget-card cashport-budget-results">
+          <div class="cashport-budget-card-header">
+            <h3 class="cashport-budget-section-title">Rezultate instant</h3>
+            <p class="cashport-budget-section-copy">Indicatorii se actualizează imediat când modifici valorile.</p>
+          </div>
+
+          <div class="cashport-budget-metrics" aria-live="polite" aria-atomic="false">
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Venit total</span>
+              <strong class="cashport-budget-metric-value" data-result="incomeTotal">0 lei</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Cheltuieli totale</span>
+              <strong class="cashport-budget-metric-value" data-result="expenseTotal">0 lei</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Sold lunar</span>
+              <strong class="cashport-budget-metric-value" data-result="balance">0 lei</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Rata economisirii</span>
+              <strong class="cashport-budget-metric-value" data-result="savingsRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Rata investițiilor</span>
+              <strong class="cashport-budget-metric-value" data-result="investmentRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Gradul de îndatorare</span>
+              <strong class="cashport-budget-metric-value" data-result="debtRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric">
+              <span class="cashport-budget-metric-label">Pondere locuință</span>
+              <strong class="cashport-budget-metric-value" data-result="housingRate">0%</strong>
+            </article>
+            <article class="cashport-budget-metric cashport-budget-metric--status">
+              <span class="cashport-budget-metric-label">Status financiar</span>
+              <strong class="cashport-budget-badge" data-result="status">Bun</strong>
+            </article>
+          </div>
+        </section>
+
+        <!-- Grafice -->
+        <section class="cashport-budget-card" aria-labelledby="cbp-charts-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cbp-charts-title" class="cashport-budget-section-title">Distribuții vizuale</h3>
+            <p class="cashport-budget-section-copy">Fără librării externe, doar SVG și CSS responsive.</p>
+          </div>
+
+          <div class="cashport-budget-chart-stack">
+            <!-- Donut -->
+            <div class="cashport-budget-chart-card">
+              <div class="cashport-budget-chart-heading">
+                <span>Distribuția cheltuielilor</span>
+                <strong data-result="largestCategory">Nicio categorie</strong>
+              </div>
+              <div class="cashport-budget-donut-wrap">
+                <svg class="cashport-budget-donut" viewBox="0 0 120 120"
+                     role="img" aria-labelledby="cbp-donut-title cbp-donut-desc">
+                  <title id="cbp-donut-title">Diagramă circulară a cheltuielilor</title>
+                  <desc id="cbp-donut-desc">Ponderea fiecărei categorii de cheltuieli în bugetul lunar.</desc>
+                  <circle class="cashport-budget-donut-track" cx="60" cy="60" r="42"></circle>
+                  <g data-chart="segments"></g>
+                </svg>
+                <div class="cashport-budget-donut-center">
+                  <span>Total</span>
+                  <strong data-result="expenseTotalCompact">0 lei</strong>
+                </div>
+              </div>
+              <ul class="cashport-budget-legend" data-chart="legend"></ul>
+            </div>
+
+            <!-- Bare venituri vs. cheltuieli -->
+            <div class="cashport-budget-chart-card">
+              <div class="cashport-budget-chart-heading">
+                <span>Venituri vs. cheltuieli</span>
+                <strong data-result="balanceCompact">0 lei</strong>
+              </div>
+              <div class="cashport-budget-bars" aria-hidden="true">
+                <div class="cashport-budget-bar-group">
+                  <div class="cashport-budget-bar-label-row">
+                    <span>Venituri</span>
+                    <strong data-result="incomeTotalCompact">0 lei</strong>
+                  </div>
+                  <div class="cashport-budget-bar-track">
+                    <span class="cashport-budget-bar-fill cashport-budget-bar-fill--income"
+                          data-chart="incomeBar"></span>
+                  </div>
+                </div>
+                <div class="cashport-budget-bar-group">
+                  <div class="cashport-budget-bar-label-row">
+                    <span>Cheltuieli</span>
+                    <strong data-result="expenseTotalBar">0 lei</strong>
+                  </div>
+                  <div class="cashport-budget-bar-track">
+                    <span class="cashport-budget-bar-fill cashport-budget-bar-fill--expense"
+                          data-chart="expenseBar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recomandări -->
+        <section class="cashport-budget-card" aria-labelledby="cbp-reco-title">
+          <div class="cashport-budget-card-header">
+            <h3 id="cbp-reco-title" class="cashport-budget-section-title">Recomandări automate</h3>
+            <p class="cashport-budget-section-copy">Sugestii generate pe baza indicatorilor calculați.</p>
+          </div>
+          <ul class="cashport-budget-recommendations" data-result="recommendations" aria-live="polite"></ul>
+        </section>
+      </aside>
+    </div><!-- /.cashport-budget-layout -->
+
+    <footer class="cashport-budget-footer">
+      <p class="cashport-budget-disclaimer">
+        Rezultatele sunt estimative și nu reprezintă consultanță financiară.
+      </p>
+    </footer>
+  </div><!-- /.cashport-budget-shell -->
+</section><!-- /.cashport-budget-calculator -->
+
+<!-- ======================================================== -->
+<!-- 3. JAVASCRIPT – logică completă cu retry WordPress-safe   -->
+<!-- ======================================================== -->
+<script>
+(function (win, doc) {
+  'use strict';
+
+  /* ── Previne dubla inițializare (util când snippet-ul e inclus
+        de mai multe ori sau de un plugin de cache) ── */
+  var FLAG = '__cbpBudgetReady';
+  if (win[FLAG]) { return; }
+  win[FLAG] = true;
+
+  /* ─────────────────────────────────────────────
+     Constante & configurație
+  ───────────────────────────────────────────── */
+  var DONUT_RADIUS     = 42;
+  var DONUT_CENTER     = 60;
+  var SVG_NS           = 'http://www.w3.org/2000/svg';
+  var MAX_RETRY_MS     = 30000; /* 30 s maxim pentru retry */
+  var RETRY_INTERVAL   = 150;  /* ms între încercări */
+
+  var THRESHOLDS = {
+    criticalDebtRate     : 45,
+    warningHousingRate   : 35,
+    minimumSavingsRate   : 10,
+    minimumInvestmentRate: 10,
+    excellentSavingsRate : 20,
+    excellentInvestmentRate: 10,
+    healthyDebtRate      : 30,
+    recommendationDebtRate: 35
+  };
+
+  var CATEGORY_LABELS = {
+    housing      : 'Locuință',
+    transport    : 'Transport',
+    food         : 'Alimentație',
+    health       : 'Sănătate',
+    education    : 'Educație',
+    clothing     : 'Îmbrăcăminte',
+    entertainment: 'Divertisment',
+    subscriptions: 'Abonamente',
+    debt         : 'Credite',
+    savings      : 'Economii',
+    investments  : 'Investiții',
+    other        : 'Alte cheltuieli'
+  };
+
+  var PALETTE = [
+    '#29e16d','#57c7ff','#8b5cf6','#ffbf47','#fb7185',
+    '#2dd4bf','#f97316','#60a5fa','#c084fc','#14b8a6',
+    '#facc15','#94a3b8'
+  ];
+
+  /* ─────────────────────────────────────────────
+     Formatare numere (locale ro-RO)
+  ───────────────────────────────────────────── */
+  var numFmt, pctFmt;
+  try {
+    numFmt = new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 0 });
+    pctFmt = new Intl.NumberFormat('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
+  } catch (e) {
+    /* Fallback pentru medii fără Intl (rar, dar posibil) */
+    numFmt = { format: function(v) { return String(Math.round(v || 0)); } };
+    pctFmt = { format: function(v) { return (Math.round((v || 0) * 10) / 10).toString(); } };
+  }
+
+  function formatCurrency(v) {
+    return numFmt.format(v || 0) + ' lei';
+  }
+
+  function formatPercent(v) {
+    return pctFmt.format(v || 0) + '%';
+  }
+
+  /* ─────────────────────────────────────────────
+     Parsare număr (compatibil cu separatori ro)
+  ───────────────────────────────────────────── */
+  function parseNumber(raw) {
+    if (typeof raw === 'number') { return raw; }
+    var s = String(raw).trim().replace(/\s+/g, '');
+    var ci = s.lastIndexOf(',');
+    var di = s.lastIndexOf('.');
+    if (ci > -1 && di > -1) {
+      if (ci > di) { s = s.replace(/\./g, '').replace(',', '.'); }
+      else         { s = s.replace(/,/g, ''); }
+    } else if (ci > -1) {
+      s = s.replace(',', '.');
+    }
+    return Number(s);
+  }
+
+  function sanitize(v) {
+    var n = parseNumber(v);
+    return (Number.isFinite(n) && n >= 0) ? n : 0;
+  }
+
+  function pct(part, total) {
+    return total ? (part / total) * 100 : 0;
+  }
+
+  function paletteColor(i) {
+    return PALETTE[i % PALETTE.length];
+  }
+
+  /* ─────────────────────────────────────────────
+     Inițializare principală
+  ───────────────────────────────────────────── */
+  var initialized = false;
+  var retryTimer  = null;
+  var observer    = null;
+
+  function stopRetry() {
+    if (retryTimer)  { clearInterval(retryTimer); retryTimer = null; }
+    if (observer)    { observer.disconnect(); observer = null; }
+  }
+
+  function init() {
+    if (initialized) { return; }
+
+    var root = doc.querySelector('[data-cashport-budget-root]');
+    if (!root) { return; }
+
+    /* ── Verifică că elementele critice există ── */
+    var inputs           = Array.prototype.slice.call(root.querySelectorAll('.cashport-budget-input'));
+    var segmentContainer = root.querySelector('[data-chart="segments"]');
+    var legendContainer  = root.querySelector('[data-chart="legend"]');
+    var incomeBar        = root.querySelector('[data-chart="incomeBar"]');
+    var expenseBar       = root.querySelector('[data-chart="expenseBar"]');
+    var recoContainer    = root.querySelector('[data-result="recommendations"]');
+
+    /* Dacă vreun element critic lipsește, mai așteptăm */
+    if (!inputs.length || !segmentContainer || !legendContainer ||
+        !incomeBar || !expenseBar || !recoContainer) {
+      return;
+    }
+
+    initialized = true;
+    stopRetry();
+
+    /* Colectăm toate nodurile cu data-result */
+    var resultNodes = Array.prototype.slice.call(root.querySelectorAll('[data-result]'));
+
+    /* ── Helpers ── */
+    function setResult(name, value, attrs) {
+      resultNodes.forEach(function (node) {
+        if (node.getAttribute('data-result') !== name) { return; }
+        node.textContent = value;
+        if (attrs) {
+          Object.keys(attrs).forEach(function (k) {
+            if (attrs[k] === null) { node.removeAttribute(k); }
+            else                   { node.setAttribute(k, attrs[k]); }
+          });
+        }
+      });
+    }
+
+    function balanceTone(b) {
+      if (b < 0) { return 'negative'; }
+      if (b > 0) { return 'positive'; }
+      return '';
+    }
+
+    /* ── Calculul totalurilor pe categorie ── */
+    function buildTotals() {
+      return inputs.reduce(function (acc, input) {
+        var type     = input.getAttribute('data-type');
+        var category = input.getAttribute('data-category');
+        var val      = sanitize(input.value);
+
+        if (type === 'expense') {
+          acc.expenses[category] = (acc.expenses[category] || 0) + val;
+          acc.expenseTotal += val;
+        } else if (type === 'income') {
+          acc.incomeTotal += val;
+        }
+        return acc;
+      }, { expenses: {}, incomeTotal: 0, expenseTotal: 0 });
+    }
+
+    /* ── Status financiar ── */
+    function getStatus(m) {
+      if (m.balance < 0 || m.debtRate > THRESHOLDS.criticalDebtRate) {
+        return { label: 'Critic', key: 'critic' };
+      }
+      if (m.housingRate   > THRESHOLDS.warningHousingRate    ||
+          m.savingsRate   < THRESHOLDS.minimumSavingsRate     ||
+          m.investmentRate < THRESHOLDS.minimumInvestmentRate) {
+        return { label: 'Atenție', key: 'atentie' };
+      }
+      if (m.savingsRate    >= THRESHOLDS.excellentSavingsRate    &&
+          m.investmentRate >= THRESHOLDS.excellentInvestmentRate &&
+          m.debtRate       <= THRESHOLDS.healthyDebtRate         &&
+          m.balance        >= 0) {
+        return { label: 'Excelent', key: 'excelent' };
+      }
+      return { label: 'Bun', key: 'bun' };
+    }
+
+    /* ── Recomandări automate ── */
+    function buildRecommendations(m) {
+      var items = [];
+
+      if (!m.incomeTotal && !m.expenseTotal) {
+        items.push('Introdu valorile lunare pentru a genera analiza completă a bugetului.');
+        return items;
+      }
+      if (m.housingRate > THRESHOLDS.warningHousingRate) {
+        items.push('Cheltuielile pentru locuință sunt prea ridicate comparativ cu venitul lunar.');
+      }
+      if (m.debtRate > THRESHOLDS.recommendationDebtRate) {
+        items.push('Gradul de îndatorare depășește 35% și merită redus pentru mai multă flexibilitate financiară.');
+      }
+      if (m.savingsRate < THRESHOLDS.minimumSavingsRate) {
+        items.push('Economiile sunt sub 10% din venit și ar trebui consolidate treptat.');
+      }
+      if (m.investmentRate < THRESHOLDS.minimumInvestmentRate) {
+        items.push('Investițiile sunt sub 10% din venit și pot fi crescute după stabilizarea fondului de siguranță.');
+      }
+      if (m.balance < 0) {
+        items.push('Soldul lunar este negativ — cheltuielile depășesc venitul disponibil.');
+      }
+      if (!items.length) {
+        items.push('Bugetul este bine echilibrat și susține o disciplină financiară sănătoasă.');
+      }
+      return items;
+    }
+
+    /* ── Actualizare recomandări ── */
+    function updateRecommendations(items) {
+      recoContainer.innerHTML = '';
+      items.forEach(function (text) {
+        var li = doc.createElement('li');
+        li.className = 'cashport-budget-recommendation';
+        li.textContent = text;
+        recoContainer.appendChild(li);
+      });
+    }
+
+    /* ── Actualizare bare (bar chart) ── */
+    function updateBars(inc, exp) {
+      var maxVal = Math.max(inc, exp, 1);
+      incomeBar.style.width  = pct(inc, maxVal) + '%';
+      expenseBar.style.width = pct(exp, maxVal) + '%';
+    }
+
+    /* ── Actualizare donut chart ── */
+    function updateDonut(expenses, expenseTotal) {
+      segmentContainer.innerHTML = '';
+      legendContainer.innerHTML  = '';
+
+      var circumference = 2 * Math.PI * DONUT_RADIUS;
+      var offset = 0;
+
+      var entries = Object.keys(CATEGORY_LABELS)
+        .map(function (k) {
+          return { key: k, label: CATEGORY_LABELS[k], value: expenses[k] || 0 };
+        })
+        .filter(function (e) { return e.value > 0; });
+
+      if (!entries.length) {
+        var emptyLi = doc.createElement('li');
+        emptyLi.className = 'cashport-budget-legend-item';
+        emptyLi.textContent = 'Nu există cheltuieli introduse încă.';
+        legendContainer.appendChild(emptyLi);
+        setResult('largestCategory', 'Nicio categorie');
+        return;
+      }
+
+      /* Cel mai mare segment */
+      var largest = entries.reduce(function (best, e) {
+        return e.value > best.value ? e : best;
+      }, entries[0]);
+
+      entries.forEach(function (entry, idx) {
+        var share     = entry.value / expenseTotal;
+        var dashLen   = share * circumference;
+        var color     = paletteColor(idx);
+
+        /* Segment SVG */
+        var circle = doc.createElementNS(SVG_NS, 'circle');
+        circle.setAttribute('class', 'cashport-budget-donut-segment');
+        circle.setAttribute('cx', String(DONUT_CENTER));
+        circle.setAttribute('cy', String(DONUT_CENTER));
+        circle.setAttribute('r',  String(DONUT_RADIUS));
+        circle.setAttribute('stroke', color);
+        circle.setAttribute('stroke-dasharray', dashLen + ' ' + (circumference - dashLen));
+        circle.setAttribute('stroke-dashoffset', String(-offset));
+        segmentContainer.appendChild(circle);
+        offset += dashLen;
+
+        /* Legendă */
+        var li     = doc.createElement('li');
+        var label  = doc.createElement('span');
+        var dot    = doc.createElement('span');
+        var strong = doc.createElement('strong');
+
+        li.className    = 'cashport-budget-legend-item';
+        label.className = 'cashport-budget-legend-label';
+        dot.className   = 'cashport-budget-legend-dot';
+        dot.style.background = color;
+
+        label.appendChild(dot);
+        label.appendChild(doc.createTextNode(entry.label));
+        strong.textContent = formatPercent(pct(entry.value, expenseTotal));
+
+        li.appendChild(label);
+        li.appendChild(strong);
+        legendContainer.appendChild(li);
+      });
+
+      setResult(
+        'largestCategory',
+        largest.label + ' · ' + formatPercent(pct(largest.value, expenseTotal))
+      );
+    }
+
+    /* ── Calculul principal (apelat la fiecare input) ── */
+    function updateCalculator() {
+      var totals  = buildTotals();
+      var balance = totals.incomeTotal - totals.expenseTotal;
+      var m = {
+        incomeTotal   : totals.incomeTotal,
+        expenseTotal  : totals.expenseTotal,
+        balance       : balance,
+        savingsRate   : pct(totals.expenses.savings     || 0, totals.incomeTotal),
+        investmentRate: pct(totals.expenses.investments || 0, totals.incomeTotal),
+        debtRate      : pct(totals.expenses.debt        || 0, totals.incomeTotal),
+        housingRate   : pct(totals.expenses.housing     || 0, totals.incomeTotal)
+      };
+
+      var status = getStatus(m);
+      var tone   = balanceTone(balance);
+
+      setResult('incomeTotal',        formatCurrency(m.incomeTotal));
+      setResult('incomeTotalCompact', formatCurrency(m.incomeTotal));
+      setResult('expenseTotal',       formatCurrency(m.expenseTotal));
+      setResult('expenseTotalCompact',formatCurrency(m.expenseTotal));
+      setResult('expenseTotalBar',    formatCurrency(m.expenseTotal));
+      setResult('balance',            formatCurrency(balance), { 'data-tone': tone || null });
+      setResult('balanceCompact',     formatCurrency(balance));
+      setResult('savingsRate',        formatPercent(m.savingsRate));
+      setResult('investmentRate',     formatPercent(m.investmentRate));
+      setResult('debtRate',           formatPercent(m.debtRate));
+      setResult('housingRate',        formatPercent(m.housingRate));
+      setResult('status',             status.label, { 'data-status': status.key });
+
+      updateDonut(totals.expenses, totals.expenseTotal);
+      updateBars(m.incomeTotal, m.expenseTotal);
+      updateRecommendations(buildRecommendations(m));
+    }
+
+    /* ── Atașare evenimente la inputuri ── */
+    inputs.forEach(function (input) {
+      input.addEventListener('input', function () {
+        var parsed    = parseNumber(input.value);
+        var sanitized = sanitize(parsed);
+        /* Corectează valori invalide sau negative în timp real */
+        if (input.value !== '' && (!Number.isFinite(parsed) || parsed < 0)) {
+          input.value = String(sanitized);
+        }
+        updateCalculator();
+      });
+
+      input.addEventListener('blur', function () {
+        /* Curăță câmpul de zerouri redundante la părăsire */
+        if (sanitize(input.value) === 0) {
+          input.value = '';
+        }
+      });
+    });
+
+    /* Calcul inițial (afișează starea implicită "0 lei / 0%") */
+    updateCalculator();
+  }
+
+  /* ─────────────────────────────────────────────
+     Strategie retry WordPress-safe:
+     1. Imediat
+     2. DOMContentLoaded
+     3. MutationObserver (pentru page buildere / AJAX)
+     4. setInterval ca fallback final
+     5. window.load ca ultima salvare
+  ───────────────────────────────────────────── */
+  function scheduleInit() {
+    /* Încearcă imediat */
+    init();
+    if (initialized) { return; }
+
+    /* MutationObserver – detectează când elementele apar în DOM */
+    if (win.MutationObserver) {
+      var target = doc.body || doc.documentElement;
+      observer = new MutationObserver(function () {
+        if (!initialized) { init(); }
+      });
+      observer.observe(target, { childList: true, subtree: true });
+    }
+
+    /* Polling fallback la fiecare RETRY_INTERVAL ms */
+    retryTimer = setInterval(function () {
+      init();
+      if (initialized) { stopRetry(); }
+    }, RETRY_INTERVAL);
+
+    /* Oprire automată după MAX_RETRY_MS indiferent de rezultat */
+    setTimeout(stopRetry, MAX_RETRY_MS);
+  }
+
+  /* Pornire în funcție de starea documentului */
+  if (doc.readyState === 'loading') {
+    doc.addEventListener('DOMContentLoaded', scheduleInit);
+  } else {
+    scheduleInit();
+  }
+
+  /* Ultima salvare: window.load (după ce toate resursele s-au încărcat) */
+  win.addEventListener('load', function () {
+    if (!initialized) { scheduleInit(); }
+  });
+
+}(window, document));
+</script>
