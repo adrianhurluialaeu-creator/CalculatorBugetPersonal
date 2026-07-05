@@ -48,7 +48,7 @@
     other: 'Alte cheltuieli'
   };
 
-  var palette = ['#29e16d', '#57c7ff', '#8b5cf6', '#ffbf47', '#fb7185', '#2dd4bf', '#f97316', '#60a5fa', '#c084fc', '#14b8a6', '#facc15', '#94a3b8'];
+  var expenseChartColors = ['#29e16d', '#57c7ff', '#8b5cf6', '#ffbf47', '#fb7185', '#2dd4bf', '#f97316', '#60a5fa', '#c084fc', '#14b8a6', '#facc15', '#94a3b8'];
 
   function parseLocalizedNumber(value) {
     if (typeof value === 'number') {
@@ -91,7 +91,23 @@
   }
 
   function getPaletteColor(index) {
-    return palette.length ? palette[index % palette.length] : '#29e16d';
+    if (expenseChartColors.length === 0) {
+      return '#29e16d';
+    }
+
+    return expenseChartColors[index % expenseChartColors.length];
+  }
+
+  function getBalanceTone(balance) {
+    if (balance < 0) {
+      return 'negative';
+    }
+
+    if (balance > 0) {
+      return 'positive';
+    }
+
+    return '';
   }
 
   function setResult(name, value, attributes) {
@@ -301,7 +317,7 @@
     };
 
     var status = getStatus(metrics);
-    var tone = balance < 0 ? 'negative' : (balance > 0 ? 'positive' : '');
+    var tone = getBalanceTone(balance);
 
     setResult('incomeTotal', formatCurrency(metrics.incomeTotal));
     setResult('incomeTotalCompact', formatCurrency(metrics.incomeTotal));
