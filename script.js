@@ -38,8 +38,12 @@
 
   var palette = ['#29e16d', '#57c7ff', '#8b5cf6', '#ffbf47', '#fb7185', '#2dd4bf', '#f97316', '#60a5fa', '#c084fc', '#14b8a6', '#facc15', '#94a3b8'];
 
+  function parseNumericInput(value) {
+    return typeof value === 'number' ? value : Number(String(value).replace(',', '.'));
+  }
+
   function sanitizeValue(value) {
-    var numericValue = Number(String(value).replace(',', '.'));
+    var numericValue = parseNumericInput(value);
 
     if (!Number.isFinite(numericValue) || numericValue < 0) {
       return 0;
@@ -221,8 +225,19 @@
       offset += dashLength;
 
       var item = document.createElement('li');
+      var label = document.createElement('span');
+      var dot = document.createElement('span');
+      var percentageValue = document.createElement('strong');
+
       item.className = 'cashport-budget-legend-item';
-      item.innerHTML = '<span class="cashport-budget-legend-label"><span class="cashport-budget-legend-dot" style="background:' + palette[index % palette.length] + '"></span>' + entry.label + '</span><strong>' + formatPercent(percentage(entry.value, expenseTotal)) + '</strong>';
+      label.className = 'cashport-budget-legend-label';
+      dot.className = 'cashport-budget-legend-dot';
+      dot.style.background = palette[index % palette.length];
+      label.appendChild(dot);
+      label.appendChild(document.createTextNode(entry.label));
+      percentageValue.textContent = formatPercent(percentage(entry.value, expenseTotal));
+      item.appendChild(label);
+      item.appendChild(percentageValue);
       legendContainer.appendChild(item);
     });
 
@@ -267,7 +282,7 @@
     input.addEventListener('input', function () {
       var sanitizedValue = sanitizeValue(input.value);
 
-      if (input.value && sanitizedValue !== Number(String(input.value).replace(',', '.'))) {
+      if (input.value && sanitizedValue !== parseNumericInput(input.value)) {
         input.value = String(sanitizedValue);
       }
 

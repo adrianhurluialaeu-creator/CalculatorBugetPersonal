@@ -54,6 +54,7 @@ Copiază conținutul din `script.js`:
 
 - păstrează HTML-ul exact în forma livrată pentru a menține compatibilitatea cu JavaScript-ul;
 - dacă tema are deja mod dark/light, lasă CSS-ul actual deoarece folosește variabile și `prefers-color-scheme`;
+- dacă tema Cashport încarcă fontul Inter, componenta îl va folosi automat; altfel revine elegant la fonturile system sans-serif;
 - testează calculatorul într-o pagină izolată înainte de publicarea finală;
 - evită editarea prefixului `cashport-budget-`, deoarece acesta previne conflictele cu stilurile existente din WordPress.
 
