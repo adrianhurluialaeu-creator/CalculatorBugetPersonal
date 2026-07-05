@@ -259,7 +259,7 @@
     };
 
     var status = getStatus(metrics);
-    var tone = balance < 0 ? 'negative' : (balance > 0 ? 'positive' : null);
+    var tone = balance < 0 ? 'negative' : (balance > 0 ? 'positive' : '');
 
     setResult('incomeTotal', formatCurrency(metrics.incomeTotal));
     setResult('incomeTotalCompact', formatCurrency(metrics.incomeTotal));
@@ -281,9 +281,10 @@
 
   inputs.forEach(function (input) {
     input.addEventListener('input', function () {
-      var sanitizedValue = sanitizeValue(input.value);
+      var parsedValue = parseNumericInput(input.value);
+      var sanitizedValue = sanitizeValue(parsedValue);
 
-      if (input.value && sanitizedValue !== parseNumericInput(input.value)) {
+      if (input.value && (!Number.isFinite(parsedValue) || parsedValue < 0)) {
         input.value = String(sanitizedValue);
       }
 
