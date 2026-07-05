@@ -11,6 +11,8 @@
   var legendContainer = root.querySelector('[data-chart="legend"]');
   var incomeBar = root.querySelector('[data-chart="incomeBar"]');
   var expenseBar = root.querySelector('[data-chart="expenseBar"]');
+  var donutRadius = 42;
+  var donutCenter = 60;
 
   var numberFormatter = new Intl.NumberFormat('ro-RO', {
     maximumFractionDigits: 0
@@ -182,8 +184,7 @@
     segmentContainer.innerHTML = '';
     legendContainer.innerHTML = '';
 
-    var radius = 42;
-    var circumference = 2 * Math.PI * radius;
+    var circumference = 2 * Math.PI * donutRadius;
     var offset = 0;
     var entries = Object.keys(categoryLabels)
       .map(function (category) {
@@ -215,9 +216,9 @@
       var dashLength = share * circumference;
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.setAttribute('class', 'cashport-budget-donut-segment');
-      circle.setAttribute('cx', '60');
-      circle.setAttribute('cy', '60');
-      circle.setAttribute('r', String(radius));
+      circle.setAttribute('cx', String(donutCenter));
+      circle.setAttribute('cy', String(donutCenter));
+      circle.setAttribute('r', String(donutRadius));
       circle.setAttribute('stroke', palette[index % palette.length]);
       circle.setAttribute('stroke-dasharray', dashLength + ' ' + (circumference - dashLength));
       circle.setAttribute('stroke-dashoffset', String(-offset));
