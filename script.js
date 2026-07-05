@@ -13,6 +13,16 @@
   var expenseBar = root.querySelector('[data-chart="expenseBar"]');
   var donutRadius = 42;
   var donutCenter = 60;
+  var financialThresholds = {
+    criticalDebtRate: 45,
+    warningHousingRate: 35,
+    minimumSavingsRate: 10,
+    minimumInvestmentRate: 10,
+    excellentSavingsRate: 20,
+    excellentInvestmentRate: 10,
+    healthyDebtRate: 30,
+    recommendationDebtRate: 35
+  };
 
   var numberFormatter = new Intl.NumberFormat('ro-RO', {
     maximumFractionDigits: 0
@@ -41,7 +51,25 @@
   var palette = ['#29e16d', '#57c7ff', '#8b5cf6', '#ffbf47', '#fb7185', '#2dd4bf', '#f97316', '#60a5fa', '#c084fc', '#14b8a6', '#facc15', '#94a3b8'];
 
   function parseLocalizedNumber(value) {
-    return typeof value === 'number' ? value : Number(String(value).replace(',', '.'));
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    var normalizedValue = String(value).trim().replace(/\s+/g, '');
+    var lastCommaIndex = normalizedValue.lastIndexOf(',');
+    var lastDotIndex = normalizedValue.lastIndexOf('.');
+
+    if (lastCommaIndex > -1 && lastDotIndex > -1) {
+      if (lastCommaIndex > lastDotIndex) {
+        normalizedValue = normalizedValue.replace(/\./g, '').replace(',', '.');
+      } else {
+        normalizedValue = normalizedValue.replace(/,/g, '');
+      }
+    } else if (lastCommaIndex > -1) {
+      normalizedValue = normalizedValue.replace(',', '.');
+    }
+
+    return Number(normalizedValue);
   }
 
   function sanitizeValue(value) {
@@ -116,15 +144,24 @@
   }
 
   function getStatus(metrics) {
-    if (metrics.balance < 0 || metrics.debtRate > 45) {
+    if (metrics.balance < 0 || metrics.debtRate > financialThresholds.criticalDebtRate) {
       return { label: 'Critic', key: 'critic' };
     }
 
-    if (metrics.housingRate > 40 || metrics.savingsRate < 10 || metrics.investmentRate < 10) {
+    if (
+      metrics.housingRate > financialThresholds.warningHousingRate ||
+      metrics.savingsRate < financialThresholds.minimumSavingsRate ||
+      metrics.investmentRate < financialThresholds.minimumInvestmentRate
+    ) {
       return { label: 'Atenție', key: 'atentie' };
     }
 
-    if (metrics.savingsRate >= 20 && metrics.investmentRate >= 10 && metrics.debtRate <= 30 && metrics.balance >= 0) {
+    if (
+      metrics.savingsRate >= financialThresholds.excellentSavingsRate &&
+      metrics.investmentRate >= financialThresholds.excellentInvestmentRate &&
+      metrics.debtRate <= financialThresholds.healthyDebtRate &&
+      metrics.balance >= 0
+    ) {
       return { label: 'Excelent', key: 'excelent' };
     }
 
@@ -139,19 +176,19 @@
       return items;
     }
 
-    if (metrics.housingRate > 35) {
+    if (metrics.housingRate > financialThresholds.warningHousingRate) {
       items.push('Cheltuielile pentru locuință sunt prea ridicate comparativ cu venitul lunar.');
     }
 
-    if (metrics.debtRate > 35) {
+    if (metrics.debtRate > financialThresholds.recommendationDebtRate) {
       items.push('Gradul de îndatorare depășește 35% și merită redus pentru mai multă flexibilitate financiară.');
     }
 
-    if (metrics.savingsRate < 10) {
+    if (metrics.savingsRate < financialThresholds.minimumSavingsRate) {
       items.push('Economiile sunt sub 10% din venit și ar trebui consolidate treptat.');
     }
 
-    if (metrics.investmentRate < 10) {
+    if (metrics.investmentRate < financialThresholds.minimumInvestmentRate) {
       items.push('Investițiile sunt sub 10% din venit și pot fi crescute după stabilizarea fondului de siguranță.');
     }
 
