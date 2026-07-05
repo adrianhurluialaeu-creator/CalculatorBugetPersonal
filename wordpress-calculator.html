@@ -893,9 +893,16 @@
   var DONUT_RADIUS     = 42;
   var DONUT_CENTER     = 60;
   var SVG_NS           = 'http://www.w3.org/2000/svg';
-  var MAX_RETRY_MS     = 30000; /* 30 s maxim pentru retry */
-  var RETRY_INTERVAL   = 150;  /* ms între încercări */
+  var MAX_RETRY_MS     = 30000; /* 30 000 ms (30 secunde) – timeout maxim pentru retry */
+  var RETRY_INTERVAL   = 150;  /* 150 ms – interval polling (suficient de rapid fără a bloca browser-ul) */
 
+  /*
+   * Praguri financiare recomandate (surse: regula 50/30/20, consiliere financiară generală):
+   *   - locuința nu ar trebui să depășească 35% din venit net
+   *   - credite/datorii: sub 30% = sănătos, 35–45% = atenție, >45% = critic
+   *   - economii recomandate: minim 10%, excelent ≥ 20% din venit
+   *   - investiții recomandate: minim 10% din venit
+   */
   var THRESHOLDS = {
     criticalDebtRate     : 45,
     warningHousingRate   : 35,
@@ -936,7 +943,10 @@
     numFmt = new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 0 });
     pctFmt = new Intl.NumberFormat('ro-RO', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
   } catch (e) {
-    /* Fallback pentru medii fără Intl (rar, dar posibil) */
+    /* Fallback pentru medii fără Intl (ex. CSP restrictiv sau browser vechi) */
+    if (win.console && win.console.warn) {
+      win.console.warn('[Cashport Budget] Intl.NumberFormat indisponibil, se folosește formatare simplă.', e);
+    }
     numFmt = { format: function(v) { return String(Math.round(v || 0)); } };
     pctFmt = { format: function(v) { return (Math.round((v || 0) * 10) / 10).toString(); } };
   }
